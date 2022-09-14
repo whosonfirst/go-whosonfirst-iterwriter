@@ -4,12 +4,15 @@ import (
 	"context"
 	"fmt"
 	"github.com/sfomuseum/go-timings"
+	"github.com/whosonfirst/go-whosonfirst-iterate/v2/emitter"
 	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
-	"github.com/whosonfirst/go-writer/v2"
 	"github.com/whosonfirst/go-whosonfirst-uri"
+	"github.com/whosonfirst/go-writer/v2"
 	"io"
 )
 
+// IterateWithWriter will process all files emitted by 'iterator_uri' and 'iterator_paths' passing each to 'wr'. Importantly
+// this method defines a default iterator callback which normalizes each (file) path to the a relative Who's On First uri.
 func IterateWithWriter(ctx context.Context, wr writer.Writer, monitor timings.Monitor, iterator_uri string, iterator_paths ...string) error {
 
 	iter_cb := func(ctx context.Context, path string, r io.ReadSeeker, args ...interface{}) error {
@@ -38,6 +41,13 @@ func IterateWithWriter(ctx context.Context, wr writer.Writer, monitor timings.Mo
 		go monitor.Signal(ctx)
 		return nil
 	}
+
+	return IterateWithWriterAndCallback(ctx, wr, iter_cb, monitor, iterator_uri, iterator_paths...)
+}
+
+// IterateWithWriterAndCallback will process all files emitted by 'iterator_uri' and 'iterator_paths' passing each to 'iter_cb'
+// (which it is assumed will eventually pass the file to 'wr').
+func IterateWithWriterAndCallback(ctx context.Context, wr writer.Writer, iter_cb emitter.EmitterCallbackFunc, monitor timings.Monitor, iterator_uri string, iterator_paths ...string) error {
 
 	iter, err := iterator.NewIterator(ctx, iterator_uri, iter_cb)
 
