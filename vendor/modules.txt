@@ -133,6 +133,9 @@ github.com/aws/smithy-go/time
 github.com/aws/smithy-go/transport/http
 github.com/aws/smithy-go/transport/http/internal/io
 github.com/aws/smithy-go/waiter
+# github.com/fsnotify/fsnotify v1.5.1
+## explicit; go 1.13
+github.com/fsnotify/fsnotify
 # github.com/g8rswimmer/error-chain v1.0.0
 ## explicit
 github.com/g8rswimmer/error-chain
@@ -170,7 +173,7 @@ github.com/sfomuseum/go-timings
 # github.com/sfomuseum/iso8601duration v1.0.0
 ## explicit; go 1.18
 github.com/sfomuseum/iso8601duration
-# github.com/sfomuseum/runtimevar v1.0.1
+# github.com/sfomuseum/runtimevar v1.0.2
 ## explicit; go 1.16
 github.com/sfomuseum/runtimevar
 # github.com/tidwall/gjson v1.12.1
@@ -226,7 +229,9 @@ gocloud.dev/internal/openurl
 gocloud.dev/internal/retry
 gocloud.dev/runtimevar
 gocloud.dev/runtimevar/awsparamstore
+gocloud.dev/runtimevar/constantvar
 gocloud.dev/runtimevar/driver
+gocloud.dev/runtimevar/filevar
 gocloud.dev/secrets
 gocloud.dev/secrets/driver
 # golang.org/x/net v0.0.0-20220401154927-543a649e0bdd

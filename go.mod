@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/sfomuseum/go-flags v0.9.0
 	github.com/sfomuseum/go-timings v1.0.0
-	github.com/sfomuseum/runtimevar v1.0.1
+	github.com/sfomuseum/runtimevar v1.0.2
 	github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.3.0
 	github.com/whosonfirst/go-writer/v2 v2.0.0
 )
@@ -28,6 +28,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sso v1.11.3 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.16.3 // indirect
 	github.com/aws/smithy-go v1.11.2 // indirect
+	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/g8rswimmer/error-chain v1.0.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.2 // indirect

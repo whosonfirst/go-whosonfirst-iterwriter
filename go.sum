@@ -422,8 +422,8 @@ github.com/sfomuseum/go-timings v1.0.0 h1:ddfGVOcX2tQVjBa9ja2D8CQHc6tlWQRjeh/NlS
 github.com/sfomuseum/go-timings v1.0.0/go.mod h1:957+kDYXCQ7y+4KO/c0yQByq39On8raH2iOyrVKlYkY=
 github.com/sfomuseum/iso8601duration v1.0.0 h1:nzLvzy9l/SxvXRBoReDi+9Hsqvpzncecqq0Te+W4Yjo=
 github.com/sfomuseum/iso8601duration v1.0.0/go.mod h1:6EenGWM7y8uVquMPEZwoR+ihpIMJluw7iYiHhDTuOAk=
-github.com/sfomuseum/runtimevar v1.0.1 h1:bU9wHMob5Px4xAdpXlmOa6KXpyeLBFfIrSCioBxeC6c=
-github.com/sfomuseum/runtimevar v1.0.1/go.mod h1:HoD1Md5daP0VorZ9IqCWh7fXTYOzcchVseacoOMLY38=
+github.com/sfomuseum/runtimevar v1.0.2 h1:xsNkYhkyKhi7WnKBcs3kc2KEFiS9HuslwQSkhrFli/U=
+github.com/sfomuseum/runtimevar v1.0.2/go.mod h1:HoD1Md5daP0VorZ9IqCWh7fXTYOzcchVseacoOMLY38=
 github.com/shopspring/decimal v0.0.0-20180709203117-cd690d0c9e24/go.mod h1:M+9NzErvs504Cn4c5DxATwIqPbtswREoFCre64PpcG4=
 github.com/shopspring/decimal v1.2.0/go.mod h1:DKyhrW/HYNuLGql+MJL6WCR6knT2jwCFRcu2hWCYk4o=
 github.com/sirupsen/logrus v1.4.1/go.mod h1:ni0Sbl8bgC9z8RoU9G6nDWqqs/fq4eDPysMBDgk/93Q=

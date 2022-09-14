@@ -1,13 +1,10 @@
 package iterwriter
 
-import ()
-
 import (
 	"context"
-	"flag"
 	"fmt"
+	"flag"
 	"github.com/sfomuseum/go-flags/flagset"
-	"github.com/sfomuseum/go-flags/multi"
 	"github.com/sfomuseum/go-timings"
 	"github.com/sfomuseum/runtimevar"
 	"github.com/whosonfirst/go-whosonfirst-iterwriter"
@@ -15,22 +12,8 @@ import (
 	"log"
 	"os"
 	"time"
+	"strings"
 )
-
-var writer_uris multi.MultiCSVString
-var iterator_uri string
-var monitor_uri string
-
-func DefaultFlagSet() *flag.FlagSet {
-
-	fs := flagset.NewFlagSet("es")
-
-	fs.Var(&writer_uris, "writer-uri", "One or more valid whosonfirst/go-writer/v2 URIs, each encoded as a gocloud.dev/runtimevar URI.")
-	fs.StringVar(&iterator_uri, "iterator-uri", "repo://", "A valid whosonfirst/go-whosonfirst-iterate/v2 URI.")
-	fs.StringVar(&monitor_uri, "monitor-uri", "counter://PT60S", "A valid sfomuseum/go-timings URI.")
-
-	return fs
-}
 
 func Run(ctx context.Context, logger *log.Logger) error {
 	fs := DefaultFlagSet()
@@ -55,6 +38,8 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet, logger *log.Logger) e
 		if err != nil {
 			return fmt.Errorf("Failed to derive writer URI for %s, %w", runtimevar_uri, err)
 		}
+
+		wr_uri = strings.TrimSpace(wr_uri)
 
 		wr, err := writer.NewWriter(ctx, wr_uri)
 
