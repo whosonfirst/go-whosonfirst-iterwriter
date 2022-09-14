@@ -1,16 +1,22 @@
 package iterwriter
 
 import (
+
+)
+
+import (
 	"context"
 	"flag"
 	"fmt"
 	"github.com/sfomuseum/go-flags/flagset"
 	"github.com/sfomuseum/go-flags/multi"
+	"github.com/sfomuseum/runtimevar"
 	"github.com/sfomuseum/go-timings"
 	"github.com/whosonfirst/go-whosonfirst-iterwriter"
 	"github.com/whosonfirst/go-writer/v2"
 	"log"
 	"os"
+	"time"
 )
 
 var writer_uris multi.MultiCSVString
@@ -41,13 +47,22 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet, logger *log.Logger) e
 
 	writers := make([]writer.Writer, len(writer_uris))
 
-	for idx, wr_uri := range writer_uris {
+	wr_ctx, cancel := context.WithTimeout(ctx, 15 * time.Second)
+	defer cancel()
+
+	for idx, runtimevar_uri := range writer_uris {
+
+		wr_uri, err := runtimevar.StringVar(wr_ctx, runtimevar_uri)
+
+		if err != nil {
+			return fmt.Errorf("Failed to derive writer URI for %s, %w", runtimevar_uri, err)
+		}
 
 		wr, err := writer.NewWriter(ctx, wr_uri)
 
 		if err != nil {
 
-			return fmt.Errorf("Failed to create new writer for %s, %w", wr_uri, err)
+			return fmt.Errorf("Failed to create new writer for %s, %w", runtimevar_uri, err)
 		}
 
 		writers[idx] = wr
