@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/sfomuseum/go-flags v0.9.0
-	github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.2.0
+	github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.3.0
 	github.com/whosonfirst/go-writer/v2 v2.0.0
 )
 
