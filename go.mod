@@ -7,6 +7,7 @@ require (
 	github.com/sfomuseum/go-timings v1.0.0
 	github.com/sfomuseum/runtimevar v1.0.2
 	github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.3.0
+	github.com/whosonfirst/go-whosonfirst-uri v1.2.0
 	github.com/whosonfirst/go-writer/v2 v2.0.0
 )
 
@@ -42,6 +43,7 @@ require (
 	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/whosonfirst/go-ioutil v1.0.2 // indirect
 	github.com/whosonfirst/go-whosonfirst-crawl v0.2.1 // indirect
+	github.com/whosonfirst/go-whosonfirst-sources v0.1.0 // indirect
 	github.com/whosonfirst/walk v0.0.1 // indirect
 	go.opencensus.io v0.23.0 // indirect
 	gocloud.dev v0.26.0 // indirect
