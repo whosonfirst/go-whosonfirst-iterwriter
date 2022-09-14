@@ -1,8 +1,6 @@
 package iterwriter
 
-import (
-
-)
+import ()
 
 import (
 	"context"
@@ -10,8 +8,8 @@ import (
 	"fmt"
 	"github.com/sfomuseum/go-flags/flagset"
 	"github.com/sfomuseum/go-flags/multi"
-	"github.com/sfomuseum/runtimevar"
 	"github.com/sfomuseum/go-timings"
+	"github.com/sfomuseum/runtimevar"
 	"github.com/whosonfirst/go-whosonfirst-iterwriter"
 	"github.com/whosonfirst/go-writer/v2"
 	"log"
@@ -27,7 +25,7 @@ func DefaultFlagSet() *flag.FlagSet {
 
 	fs := flagset.NewFlagSet("es")
 
-	fs.Var(&writer_uris, "writer-uri", "One or more valid whosonfirst/go-writer/v2 URIs.")
+	fs.Var(&writer_uris, "writer-uri", "One or more valid whosonfirst/go-writer/v2 URIs, each encoded as a gocloud.dev/runtimevar URI.")
 	fs.StringVar(&iterator_uri, "iterator-uri", "repo://", "A valid whosonfirst/go-whosonfirst-iterate/v2 URI.")
 	fs.StringVar(&monitor_uri, "monitor-uri", "counter://PT60S", "A valid sfomuseum/go-timings URI.")
 
@@ -47,7 +45,7 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet, logger *log.Logger) e
 
 	writers := make([]writer.Writer, len(writer_uris))
 
-	wr_ctx, cancel := context.WithTimeout(ctx, 15 * time.Second)
+	wr_ctx, cancel := context.WithTimeout(ctx, 15*time.Second)
 	defer cancel()
 
 	for idx, runtimevar_uri := range writer_uris {
