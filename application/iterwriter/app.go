@@ -6,20 +6,24 @@ import (
 	"fmt"
 	"github.com/sfomuseum/go-flags/flagset"
 	"github.com/sfomuseum/go-flags/multi"
+	"github.com/sfomuseum/go-timings"
 	"github.com/whosonfirst/go-whosonfirst-iterwriter"
 	"github.com/whosonfirst/go-writer/v2"
 	"log"
+	"os"
 )
 
 var writer_uris multi.MultiCSVString
 var iterator_uri string
+var monitor_uri string
 
 func DefaultFlagSet() *flag.FlagSet {
 
 	fs := flagset.NewFlagSet("es")
 
-	fs.Var(&writer_uris, "writer-uri", "")
-	fs.StringVar(&iterator_uri, "iterator-uri", "repo://", "")
+	fs.Var(&writer_uris, "writer-uri", "One or more valid whosonfirst/go-writer/v2 URIs.")
+	fs.StringVar(&iterator_uri, "iterator-uri", "repo://", "A valid whosonfirst/go-whosonfirst-iterate/v2 URI.")
+	fs.StringVar(&monitor_uri, "monitor-uri", "counter://PT60S", "A valid sfomuseum/go-timings URI.")
 
 	return fs
 }
@@ -51,7 +55,16 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet, logger *log.Logger) e
 
 	mw := writer.NewMultiWriter(writers...)
 
-	err := iterwriter.IterateWithWriter(ctx, mw, iterator_uri, iterator_paths...)
+	monitor, err := timings.NewMonitor(ctx, monitor_uri)
+
+	if err != nil {
+		return fmt.Errorf("Failed to create monitor, %w", err)
+	}
+
+	monitor.Start(ctx, os.Stdout)
+	defer monitor.Stop(ctx)
+
+	err = iterwriter.IterateWithWriter(ctx, mw, monitor, iterator_uri, iterator_paths...)
 
 	if err != nil {
 		return fmt.Errorf("Failed to iterate with writer, %w", err)
