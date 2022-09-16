@@ -460,8 +460,8 @@ github.com/whosonfirst/go-whosonfirst-sources v0.1.0 h1:JuKLa6KWke22jBfJ1pM9WQHo
 github.com/whosonfirst/go-whosonfirst-sources v0.1.0/go.mod h1:EUMHyGzUmqPPxlMmOp+28BFeoBdxxE0HCKRd67lkqGM=
 github.com/whosonfirst/go-whosonfirst-uri v1.2.0 h1:lhmRsIhcpTr5HAo+kXKRGsSt76HTh3Ko/oTR2jpCm/o=
 github.com/whosonfirst/go-whosonfirst-uri v1.2.0/go.mod h1:CuVygTCUpMG945MMvqHyqxvc/L5YkDaMrrVpRFr7ZxY=
-github.com/whosonfirst/go-writer/v2 v2.0.0 h1:BQL9qR3z5yHGuRtbkqf/MYkaqu/p6r5txRTZ/h1w5xA=
-github.com/whosonfirst/go-writer/v2 v2.0.0/go.mod h1:/fiSSOP4uSOTCQOHzin9Ey/G9s55U4iRLdK9MHr2MMo=
+github.com/whosonfirst/go-writer/v3 v3.0.0 h1:EyGed1mP60LbXYGTVqQl5PAkfUkLfczGOPcC9mcHTMQ=
+github.com/whosonfirst/go-writer/v3 v3.0.0/go.mod h1:TmYoKR7RvrzJaj3eOgMhgXHFE+R1yuO/4smxKHFhv14=
 github.com/whosonfirst/walk v0.0.1 h1:t0QrqGwOdPMSeovFZSXfiS0GIGHrRXK3Wb9z5Uhs2bg=
 github.com/whosonfirst/walk v0.0.1/go.mod h1:1KtP/VeooSlFOI61p+THc/C16Ra8Z5MjpjI0tsd3c1M=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
