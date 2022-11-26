@@ -11,9 +11,7 @@ import (
 	"io"
 )
 
-// IterateWithWriter will process all files emitted by 'iterator_uri' and 'iterator_paths' passing each to 'wr'. Importantly
-// this method defines a default iterator callback which normalizes each (file) path to the a relative Who's On First uri.
-func IterateWithWriter(ctx context.Context, wr writer.Writer, monitor timings.Monitor, iterator_uri string, iterator_paths ...string) error {
+func DefaultIterwriterCallback() emitter.EmitterCallbackFunc {
 
 	iter_cb := func(ctx context.Context, path string, r io.ReadSeeker, args ...interface{}) error {
 
@@ -42,6 +40,14 @@ func IterateWithWriter(ctx context.Context, wr writer.Writer, monitor timings.Mo
 		return nil
 	}
 
+	return iter_cb
+}
+
+// IterateWithWriter will process all files emitted by 'iterator_uri' and 'iterator_paths' passing each to 'wr'. Importantly
+// this method defines a default iterator callback which normalizes each (file) path to the a relative Who's On First uri.
+func IterateWithWriter(ctx context.Context, wr writer.Writer, monitor timings.Monitor, iterator_uri string, iterator_paths ...string) error {
+
+	iter_cb := DefaultIterwriteCallback()
 	return IterateWithWriterAndCallback(ctx, wr, iter_cb, monitor, iterator_uri, iterator_paths...)
 }
 

@@ -7,6 +7,7 @@ import (
 	"github.com/sfomuseum/go-flags/flagset"
 	"github.com/sfomuseum/go-timings"
 	"github.com/sfomuseum/runtimevar"
+	"github.com/whosonfirst/go-whosonfirst-iterate/v2/emitter"
 	"github.com/whosonfirst/go-whosonfirst-iterwriter"
 	"github.com/whosonfirst/go-writer/v3"
 	"log"
@@ -15,12 +16,36 @@ import (
 	"time"
 )
 
+type RunOptions struct {
+	Logger   *log.Logger
+	FlagSet  *flag.FlagSet
+	Callback emitter.EmitterCallbackFunc
+}
+
 func Run(ctx context.Context, logger *log.Logger) error {
 	fs := DefaultFlagSet()
 	return RunWithFlagSet(ctx, fs, logger)
 }
 
 func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet, logger *log.Logger) error {
+
+	iter_cb := DefaultIterwriteCallback()
+
+	opts := &RunOptions{
+		Logger:   logger,
+		FlagSet:  fs,
+		Callback: iter_cb,
+	}
+
+	return RunWithOptions(ctx, opts)
+}
+
+func RunWithOptions(ctx context.Context, opts *RunOptions) error {
+
+	logger := opts.Logger
+	fs := opts.FlagSet
+
+	iter_cb := opts.Callback
 
 	flagset.Parse(fs)
 
@@ -72,7 +97,7 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet, logger *log.Logger) e
 	monitor.Start(ctx, os.Stdout)
 	defer monitor.Stop(ctx)
 
-	err = iterwriter.IterateWithWriter(ctx, mw, monitor, iterator_uri, iterator_paths...)
+	err = iterwriter.IterateWithWriterAndCallback(ctx, mw, iter_cb, monitor, iterator_uri, iterator_paths...)
 
 	if err != nil {
 		return fmt.Errorf("Failed to iterate with writer, %w", err)
