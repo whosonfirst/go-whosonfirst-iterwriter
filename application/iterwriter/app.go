@@ -7,7 +7,6 @@ import (
 	"github.com/sfomuseum/go-flags/flagset"
 	"github.com/sfomuseum/go-timings"
 	"github.com/sfomuseum/runtimevar"
-	"github.com/whosonfirst/go-whosonfirst-iterate/v2/emitter"
 	"github.com/whosonfirst/go-whosonfirst-iterwriter"
 	"github.com/whosonfirst/go-writer/v3"
 	"log"
@@ -17,9 +16,9 @@ import (
 )
 
 type RunOptions struct {
-	Logger   *log.Logger
-	FlagSet  *flag.FlagSet
-	Callback emitter.EmitterCallbackFunc
+	Logger       *log.Logger
+	FlagSet      *flag.FlagSet
+	CallbackFunc iterwriter.IterwriterCallbackFunc
 }
 
 func Run(ctx context.Context, logger *log.Logger) error {
@@ -29,12 +28,10 @@ func Run(ctx context.Context, logger *log.Logger) error {
 
 func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet, logger *log.Logger) error {
 
-	iter_cb := DefaultIterwriteCallback()
-
 	opts := &RunOptions{
-		Logger:   logger,
-		FlagSet:  fs,
-		Callback: iter_cb,
+		Logger:       logger,
+		FlagSet:      fs,
+		CallbackFunc: iterwriter.DefaultIterwriterCallback,
 	}
 
 	return RunWithOptions(ctx, opts)
@@ -42,10 +39,7 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet, logger *log.Logger) e
 
 func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
-	logger := opts.Logger
 	fs := opts.FlagSet
-
-	iter_cb := opts.Callback
 
 	flagset.Parse(fs)
 
@@ -96,6 +90,8 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 	monitor.Start(ctx, os.Stdout)
 	defer monitor.Stop(ctx)
+
+	iter_cb := opts.CallbackFunc(mw, opts.Logger, monitor)
 
 	err = iterwriter.IterateWithWriterAndCallback(ctx, mw, iter_cb, monitor, iterator_uri, iterator_paths...)
 
