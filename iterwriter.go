@@ -12,8 +12,12 @@ import (
 	"log"
 )
 
+// Type IterwriterCallbackFunc defines a function to be invoked that will return a `emitter.EmitterCallbackFunc`
+// callback function for use by `go-whosonfirst-iterate/v2/iterator` instances.
 type IterwriterCallbackFunc func(writer.Writer, *log.Logger, timings.Monitor) emitter.EmitterCallbackFunc
 
+// DefaultIterwriterCallback returns a `emitter.EmitterCallbackFunc` callback function that will write each feature
+// to a WOF-normalized path using 'wr'.
 func DefaultIterwriterCallback(wr writer.Writer, logger *log.Logger, monitor timings.Monitor) emitter.EmitterCallbackFunc {
 
 	iter_cb := func(ctx context.Context, path string, r io.ReadSeeker, args ...interface{}) error {
