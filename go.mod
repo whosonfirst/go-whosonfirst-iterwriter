@@ -6,7 +6,7 @@ require (
 	github.com/sfomuseum/go-flags v0.10.0
 	github.com/sfomuseum/go-timings v1.2.1
 	github.com/sfomuseum/runtimevar v1.2.0
-	github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.4.0
+	github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.4.1
 	github.com/whosonfirst/go-whosonfirst-uri v1.3.0
 	github.com/whosonfirst/go-writer/v3 v3.1.1
 )
