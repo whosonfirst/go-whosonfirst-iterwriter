@@ -13,7 +13,7 @@ import (
 	"github.com/sfomuseum/go-flags/flagset"
 	"github.com/sfomuseum/go-timings"
 	"github.com/sfomuseum/runtimevar"
-	"github.com/whosonfirst/go-whosonfirst-iterwriter"
+	"github.com/whosonfirst/go-whosonfirst-iterwriter/v3"
 	"github.com/whosonfirst/go-writer/v3"
 )
 
@@ -27,12 +27,12 @@ type RunOptions struct {
 	Verbose       bool
 }
 
-func Run(ctx context.Context, logger *slog.Logger) error {
+func Run(ctx context.Context) error {
 	fs := DefaultFlagSet()
-	return RunWithFlagSet(ctx, fs, logger)
+	return RunWithFlagSet(ctx, fs)
 }
 
-func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet, logger *slog.Logger) error {
+func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 
 	opts, err := DefaultOptionsFromFlagSet(fs, false)
 
@@ -40,7 +40,7 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet, logger *slog.Logger) 
 		return fmt.Errorf("Failed to derive options from flags, %w", err)
 	}
 
-	return RunWithOptions(ctx, opts, logger)
+	return RunWithOptions(ctx, opts)
 }
 
 func DefaultOptionsFromFlagSet(fs *flag.FlagSet, parsed bool) (*RunOptions, error) {
@@ -76,13 +76,11 @@ func DefaultOptionsFromFlagSet(fs *flag.FlagSet, parsed bool) (*RunOptions, erro
 	return opts, nil
 }
 
-func RunWithOptions(ctx context.Context, opts *RunOptions, logger *slog.Logger) error {
-
-	slog.SetDefault(logger)
+func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 	if opts.Verbose {
 		slog.SetLogLoggerLevel(slog.LevelDebug)
-		logger.Debug("Verbose (debug) logging enabled")
+		slog.Debug("Verbose (debug) logging enabled")
 	}
 
 	var mw writer.Writer
