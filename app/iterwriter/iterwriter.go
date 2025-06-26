@@ -4,29 +4,15 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"io"
 	"log/slog"
-	"os"
 	"strings"
 	"time"
 
-	"github.com/sfomuseum/go-flags/flagset"
 	"github.com/sfomuseum/go-timings"
 	"github.com/sfomuseum/runtimevar"
 	"github.com/whosonfirst/go-whosonfirst-iterate/v3"
-	"github.com/whosonfirst/go-whosonfirst-iterwriter/v4"
 	"github.com/whosonfirst/go-writer/v3"
 )
-
-type RunOptions struct {
-	CallbackFunc  iterwriter.IterwriterCallback
-	Writer        writer.Writer
-	IteratorURI   string
-	IteratorPaths []string
-	MonitorURI    string
-	MonitorWriter io.Writer
-	Verbose       bool
-}
 
 func Run(ctx context.Context) error {
 	fs := DefaultFlagSet()
@@ -42,35 +28,6 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 	}
 
 	return RunWithOptions(ctx, opts)
-}
-
-func DefaultOptionsFromFlagSet(fs *flag.FlagSet, parsed bool) (*RunOptions, error) {
-
-	if !parsed {
-
-		flagset.Parse(fs)
-
-		err := flagset.SetFlagsFromEnvVars(fs, "WOF")
-
-		if err != nil {
-			return nil, fmt.Errorf("Failed to assign flags from environment variables, %w", err)
-		}
-	}
-
-	cb_func := iterwriter.DefaultIterwriterCallback(forgiving)
-
-	iterator_paths := fs.Args()
-
-	opts := &RunOptions{
-		CallbackFunc:  cb_func,
-		IteratorURI:   iterator_uri,
-		IteratorPaths: iterator_paths,
-		MonitorURI:    monitor_uri,
-		MonitorWriter: os.Stderr,
-		Verbose:       verbose,
-	}
-
-	return opts, nil
 }
 
 func RunWithOptions(ctx context.Context, opts *RunOptions) error {
