@@ -13,12 +13,13 @@ import (
 	"github.com/sfomuseum/go-flags/flagset"
 	"github.com/sfomuseum/go-timings"
 	"github.com/sfomuseum/runtimevar"
+	"github.com/whosonfirst/go-whosonfirst-iterate/v3"
 	"github.com/whosonfirst/go-whosonfirst-iterwriter/v4"
 	"github.com/whosonfirst/go-writer/v3"
 )
 
 type RunOptions struct {
-	// CallbackFunc  iterwriter.IterwriterCallbackFunc
+	CallbackFunc  iterwriter.IterwriterCallback
 	Writer        writer.Writer
 	IteratorURI   string
 	IteratorPaths []string
@@ -56,18 +57,12 @@ func DefaultOptionsFromFlagSet(fs *flag.FlagSet, parsed bool) (*RunOptions, erro
 		}
 	}
 
-	/*
-		cb_func := iterwriter.DefaultIterwriterCallback
-
-		if forgiving {
-			cb_func = iterwriter.ForgivingIterwriterCallback
-		}
-	*/
+	cb_func := iterwriter.DefaultIterwriterCallback(forgiving)
 
 	iterator_paths := fs.Args()
 
 	opts := &RunOptions{
-		// CallbackFunc:  cb_func,
+		CallbackFunc:  cb_func,
 		IteratorURI:   iterator_uri,
 		IteratorPaths: iterator_paths,
 		MonitorURI:    monitor_uri,
@@ -134,10 +129,39 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	monitor.Start(ctx, opts.MonitorWriter)
 	defer monitor.Stop(ctx)
 
-	err = iterwriter.Iterate(ctx, mw, monitor, opts.IteratorURI, opts.IteratorPaths...)
+	iter, err := iterate.NewIterator(ctx, opts.IteratorURI)
 
 	if err != nil {
-		return fmt.Errorf("Failed to iterate with writer, %w", err)
+		return fmt.Errorf("Failed to create new iterator, %w", err)
+	}
+
+	for rec, err := range iter.Iterate(ctx, opts.IteratorPaths...) {
+
+		if err != nil {
+			return err
+		}
+
+		defer rec.Body.Close()
+
+		err = opts.CallbackFunc(ctx, rec, mw)
+
+		if err != nil {
+			return err
+		}
+
+		monitor.Signal(ctx)
+	}
+
+	err = mw.Close(ctx)
+
+	if err != nil {
+		return fmt.Errorf("Failed to close writer, %w", err)
+	}
+
+	err = iter.Close()
+
+	if err != nil {
+		return fmt.Errorf("Failed to close iterator, %w", err)
 	}
 
 	return nil

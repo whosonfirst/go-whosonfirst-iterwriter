@@ -3,36 +3,18 @@ package iterwriter
 import (
 	"context"
 	"fmt"
-	// "io"
 	"log/slog"
 
-	"github.com/sfomuseum/go-timings"
 	"github.com/whosonfirst/go-whosonfirst-iterate/v3"
 	"github.com/whosonfirst/go-whosonfirst-uri"
 	"github.com/whosonfirst/go-writer/v3"
 )
 
-// IterateWithWriterAndCallback will process all files emitted by 'iterator_uri' and 'iterator_paths' passing each to 'iter_cb'
-// (which it is assumed will eventually pass the file to 'wr').
-func Iterate(ctx context.Context, wr writer.Writer, monitor timings.Monitor, iterator_uri string, iterator_paths ...string) error {
+type IterwriterCallback func(context.Context, *iterate.Record, writer.Writer) error
 
-	forgiving := false
+func DefaultIterwriterCallback(forgiving bool) IterwriterCallback {
 
-	iter, err := iterate.NewIterator(ctx, iterator_uri)
-
-	if err != nil {
-		return fmt.Errorf("Failed to create new iterator, %w", err)
-	}
-
-	defer iter.Close()
-
-	for rec, err := range iter.Iterate(ctx, iterator_paths...) {
-
-		if err != nil {
-			return err
-		}
-
-		defer rec.Body.Close()
+	return func(ctx context.Context, rec *iterate.Record, wr writer.Writer) error {
 
 		logger := slog.Default()
 		logger = logger.With("path", rec.Path)
@@ -69,14 +51,6 @@ func Iterate(ctx context.Context, wr writer.Writer, monitor timings.Monitor, ite
 			}
 		}
 
-		go monitor.Signal(ctx)
+		return nil
 	}
-
-	err = wr.Close(ctx)
-
-	if err != nil {
-		return fmt.Errorf("Failed to close writer, %w", err)
-	}
-
-	return nil
 }
