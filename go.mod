@@ -1,4 +1,4 @@
-module github.com/whosonfirst/go-whosonfirst-iterwriter/v3
+module github.com/whosonfirst/go-whosonfirst-iterwriter/v4
 
 go 1.24.0
 

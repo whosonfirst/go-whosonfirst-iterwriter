@@ -13,12 +13,12 @@ import (
 	"github.com/sfomuseum/go-flags/flagset"
 	"github.com/sfomuseum/go-timings"
 	"github.com/sfomuseum/runtimevar"
-	"github.com/whosonfirst/go-whosonfirst-iterwriter/v3"
+	"github.com/whosonfirst/go-whosonfirst-iterwriter/v4"
 	"github.com/whosonfirst/go-writer/v3"
 )
 
 type RunOptions struct {
-	CallbackFunc  iterwriter.IterwriterCallbackFunc
+	// CallbackFunc  iterwriter.IterwriterCallbackFunc
 	Writer        writer.Writer
 	IteratorURI   string
 	IteratorPaths []string
@@ -56,16 +56,18 @@ func DefaultOptionsFromFlagSet(fs *flag.FlagSet, parsed bool) (*RunOptions, erro
 		}
 	}
 
-	cb_func := iterwriter.DefaultIterwriterCallback
+	/*
+		cb_func := iterwriter.DefaultIterwriterCallback
 
-	if forgiving {
-		cb_func = iterwriter.ForgivingIterwriterCallback
-	}
+		if forgiving {
+			cb_func = iterwriter.ForgivingIterwriterCallback
+		}
+	*/
 
 	iterator_paths := fs.Args()
 
 	opts := &RunOptions{
-		CallbackFunc:  cb_func,
+		// CallbackFunc:  cb_func,
 		IteratorURI:   iterator_uri,
 		IteratorPaths: iterator_paths,
 		MonitorURI:    monitor_uri,
@@ -132,9 +134,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	monitor.Start(ctx, opts.MonitorWriter)
 	defer monitor.Stop(ctx)
 
-	iter_cb := opts.CallbackFunc(mw, monitor)
-
-	err = iterwriter.IterateWithWriterAndCallback(ctx, mw, iter_cb, monitor, opts.IteratorURI, opts.IteratorPaths...)
+	err = iterwriter.Iterate(ctx, mw, monitor, opts.IteratorURI, opts.IteratorPaths...)
 
 	if err != nil {
 		return fmt.Errorf("Failed to iterate with writer, %w", err)
